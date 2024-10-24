@@ -20,6 +20,8 @@ The dataset used consists of radiological breast images categorized into two cla
 - **Benign**: Non-cancerous images
 - **Malignant**: Cancerous images
 
+You can download the dataset from this [Google Drive link](https://drive.google.com/file/d/1ZjBFsH58lF7h-FeOhmcPxXz_fTLZXKkk/view?usp=sharing).
+
 ### Dataset Structure
 The dataset is structured in two main folders:
 ```
@@ -77,11 +79,11 @@ The model is based on a Support Vector Machine (SVM) classifier that uses a set 
 
 2. **SIFT (Scale-Invariant Feature Transform)**:
    Detects keypoints in the image and computes descriptors around these keypoints.
-
-3. **LBP (Local Binary Patterns)**:
+   
+4. **LBP (Local Binary Patterns)**:
    Extracts texture features by comparing pixel intensities with their neighbors.
 
-4. **Color Histogram**:
+5. **Color Histogram**:
    Generates histograms of pixel intensity distributions.
 
 ## Training the Model
