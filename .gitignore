@@ -1,0 +1,12 @@
+/app/frontend/node_modules
+/app/backend/venv
+/app/backend/data_dir
+/app/backend/uploads
+/app/backend/.env*
+/Users/subbu/Desktop/ML_Project/Breast-Cancer-Detection-with-Radiological-Images_SVM/app/backend/.env
+/app/frontend/node_modules
+/Users/subbu/Desktop/ML_Project/Breast-Cancer-Detection-with-Radiological-Images_SVM/app/frontend/node_modules
+/app/backend/svm_breast_cancer_model.pkl
+/app/backend/breast_cancer_model.pkl
+/app/backend/feature_scaler.pkl
+/app/backend/training_20241026_105131.log
