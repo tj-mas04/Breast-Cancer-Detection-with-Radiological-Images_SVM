@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import { HeartPulse } from "lucide-react"
 import axios from "axios"
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,19 +26,34 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
     try {
+      setLoading(true);
       const res = await axios.post('http://localhost:8000/login',{
         username,
         password
       })
-      console.log(res.data)
+      
       if(res.status == 200 || res.status == 201) {
         localStorage.setItem('userId',res.data.userId);
         localStorage.setItem('username',res.data.username)
+        localStorage.setItem('isLoggedIn','true');
         router.push("/dashboard")
       }
-    } catch (error) {
-      console.error(error);
+      else if(res.status == 401 || res.status == 404){
+        console.log(res.data)
+        toast.error(res.data.detail)
+        return;
+      }
+    } catch (error : any) {
+      if (error.response?.status === 401 || error.response?.status === 404) {
+        toast.error(error.response?.data?.detail || "Invalid credentials or user not found");
+      } else {
+        toast.error("Error, Try Again please");
+      }
+      setLoading(false)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -46,7 +62,7 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <HeartPulse className="mx-auto h-12 w-12 text-pink-500" />
-          <h2 className="mt-6 text-3xl font-extrabold text-white">Breast Cancer Detection System</h2>
+          <h2 className="mt-6 text-3xl font-extrabold text-white">MediScan AI</h2>
           <p className="mt-2 text-sm text-gray-400">Early detection saves lives. Log in to access your account.</p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -104,9 +120,9 @@ export default function LoginPage() {
           <div>
             <Button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500" disabled={loading}
             >
-              Log in
+              {loading ? 'Loading..' : 'Log In'}
             </Button>
           </div>
         </form>

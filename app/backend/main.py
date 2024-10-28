@@ -14,9 +14,9 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 origins = [
-    "http://localhost",            # Local development
-    "http://localhost:3000",       # Local frontend dev server (e.g., React)
-      # Your production domain
+    "http://localhost",            
+    "http://localhost:3000",       
+    # Your production domain
 ]
 
 # Add CORS middleware to the app.
@@ -129,3 +129,42 @@ async def read_users_me(username: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
 
     return current_user
+
+@app.get("/user/statistics/", response_model=dict)
+def get_user_statistics(
+    username: str,
+    db: Session = Depends(get_db)
+):
+    # Get user
+    user = db.query(models.User).filter(models.User.username == username).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Get user's screenings
+    screenings = db.query(models.Screening).filter(
+        models.Screening.user_id == user.id
+    ).all()
+    
+    # Calculate statistics
+    total_screenings = len(screenings)
+    if total_screenings == 0:
+        return {
+            "total_screenings": 0,
+            "benign_percentage": 0,
+            "malignant_percentage": 0,
+            "average_confidence": 0,
+            "last_screening_date": None
+        }
+    
+    benign_count = sum(1 for s in screenings if s.result == "Benign")
+    malignant_count = total_screenings - benign_count
+    
+    stats = {
+        "total_screenings": total_screenings,
+        "benign_percentage": (benign_count / total_screenings) * 100,
+        "malignant_percentage": (malignant_count / total_screenings) * 100,
+        "average_confidence": sum(s.confidence for s in screenings) / total_screenings * 100,
+        "last_screening_date": max(s.created_at for s in screenings)
+    }
+    
+    return stats

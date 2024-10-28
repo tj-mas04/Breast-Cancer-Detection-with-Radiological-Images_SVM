@@ -7,10 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { HeartPulse, ShieldCheck, Microscope, Users, ChevronRight, Github } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { Toaster } from 'sonner'
 
 export default function Home() {
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-
+  
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -22,7 +25,7 @@ export default function Home() {
       <header className="px-4 lg:px-6 h-14 flex items-center border-b border-gray-800">
         <Link className="flex items-center justify-center" href="#">
           <HeartPulse className="h-6 w-6 text-pink-500" />
-          <span className="ml-2 text-lg font-bold">Breast Cancer Detection System</span>
+          <span className="ml-2 text-lg font-bold">MediScan AI</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
           <Link className="text-sm font-medium hover:text-pink-400 transition-colors" href="/login">
@@ -34,7 +37,7 @@ export default function Home() {
         </nav>
       </header>
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+        <section className="w-full py-6">
           <motion.div className="container px-4 md:px-6" {...fadeIn}>
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
               <div className="flex flex-col justify-center space-y-4">
@@ -48,17 +51,27 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button className="bg-pink-600 hover:bg-pink-700 text-white">Get Started</Button>
-                  <Button variant="outline" className="text-pink-400 border-pink-400 hover:bg-pink-400 hover:text-gray-900">Learn More</Button>
+                <button className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50" onClick={()=>router.push('/login')}>
+  <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+  <span className="inline-flex  h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-10 py-1 text-base font-medium text-white backdrop-blur-3xl">
+    Get Started 
+  </span>
+</button>
+<button className="p-[3px] relative">
+  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
+  <div className="px-8 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
+    Learn More
+  </div>
+</button>
                 </div>
               </div>
               <div className="flex items-center justify-center">
                 <Image
                   alt="Breast Cancer Detection System"
-                  className="aspect-video overflow-hidden rounded-xl object-cover object-center"
-                  height="310"
-                  src="/placeholder.svg"
-                  width="550"
+                  className=""
+                  height="800"
+                  width="800"
+                  src="/landing.svg"
                 />
               </div>
             </div>
